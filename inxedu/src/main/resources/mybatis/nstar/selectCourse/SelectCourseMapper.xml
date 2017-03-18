@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SelectCourseMapper">
+<!--
+	<resultMap type="com.inxedu.os.nstar.selectLession.entity.college.College" id="College">
+		<result property="id" column="id"/>
+		<result property="collegeCode" column="collegeCode"/>
+		<result property="collegeName" column="collegeName"/>
+		<result property="description" column="description"/>
+	</resultMap>
+
+	<sql id="allCollege">
+		COURSE_ID,
+		COURSE_NAME,
+		CLASS_ROOM,,
+		RESIDAUL_COUNT,
+	</sql>
+-->
+	<resultMap type="com.inxedu.os.nstar.selectCourse.entity.selectCourse.StudentIdWithCourseId" id="StudentIdWithCourseId">
+		<result property="studentId" column="STUDENT_ID"/>
+		<result property="courseId" column="COURSE_TABLE_ID"/>
+	</resultMap>
+
+	<!--查询所有的*-->
+	<select id="getAllStudentIdWithCourseId" resultMap="StudentIdWithCourseId">
+		select COURSE_ID,COURSE_TABLE_ID from edu_course_student
+	</select>
+	<resultMap type="com.inxedu.os.nstar.selectCourse.entity.selectCourse.CourseIdWithResidaulCount" id="CourseIdWithResidaulCount">
+		<result property="id" column="COURSE_ID"/>
+		<result property="residaulCount" column="RESIDAUL_COUNT"/>
+	</resultMap>
+
+	<!--查询所有的*-->
+	<select id="getAllCourseIdWithResidaulCount" resultMap="CourseIdWithResidaulCount">
+		select COURSE_ID,RESIDAUL_COUNT from edu_course
+	</select>
+
+	<resultMap id="StuClass" type="com.inxedu.os.nstar.selectCourse.entity.stuClass.StuClass">
+		<result property="id" column="id" />
+		<result property="className" column="className" />
+		<result property="description" column="description" />
+		<result property="schoolId" column="schoolId" />
+		<result property="seletableCourseId" column="SeletableCourseId" />
+	</resultMap>
+	<resultMap id="Course" type="com.inxedu.os.edu.entity.course.Course">
+		<result property="courseId" column="COURSE_ID" />
+		<result property="courseName" column="COURSE_NAME" />
+		<result property="isavaliable" column="IS_AVALIABLE"/>
+		<result property="subjectId" column="SUBJECT_ID"/>
+		<result property="subjectLink" column="SUBJECT_LINK"/>
+		<result property="addTime" column="ADD_TIME"/>
+		<result property="sourcePrice" column="SOURCE_PRICE"/>
+		<result property="currentPrice" column="CURRENT_PRICE"/>
+		<result property="title" column="TITLE"/>
+		<result property="context" column="CONTEXT"/>
+		<result property="lessionNum" column="LESSION_NUM"/>
+		<result property="logo" column="LOGO"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="pageBuycount" column="PAGE_BUYCOUNT"/>
+		<result property="pageViewcount" column="PAGE_VIEWCOUNT"/>
+		<result property="endTime" column="END_TIME"/>
+
+		<result property="loseType" column="LOSETYPE"/>
+		<result property="loseTime" column="LOSE_TIME"/>
+		<result property="courseNo" column="COURSE_NO"/>
+		<result property="teacherName" column="TEACHER_NAME"/>
+		<result property="jobTitle" column="JOB_TITLE"/>
+		<result property="openSchool" column="OPEN_SCHOOL"/>
+		<result property="property" column="PROPERTY"/>
+		<result property="maxNumber" column="MAX_NUMBER"/>
+		<result property="score" column="SCORE"/>
+		<result property="week1" column="WEEK1"/>
+		<result property="week2" column="WEEK2"/>
+		<result property="week3" column="WEEK3"/>
+		<result property="week4" column="WEEK4"/>
+		<result property="week5" column="WEEK5"/>
+		<result property="week6" column="WEEK6"/>
+		<result property="week7" column="WEEK7"/>
+		<result property="classroom" column="CLASS_ROOM"/>
+		<result property="weekIds" column="WEEK_IDS"/>
+		<result property="residaulCount" column="RESIDAUL_COUNT"/>
+		<result property="labCourseId" column="LAB_COURSE_ID"/>
+		<result property="type" column="TYPE"/>
+		<result property="memo" column="MEMO"/>
+		<result property="teacherId" column="TEACHER_ID"/>
+	</resultMap>
+	<resultMap type="com.inxedu.os.edu.entity.user.User" id="User">
+		<result property="userId" column="USER_ID"/>
+		<result property="mobile" column="MOBILE"/>
+		<result property="email" column="EMAIL"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="userName" column="USER_NAME"/>
+		<result property="showName" column="SHOW_NAME"/>
+		<result property="sex" column="SEX"/>
+		<result property="age" column="AGE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="isavalible" column="IS_AVALIBLE"/>
+		<result property="picImg" column="PIC_IMG"/>
+		<result property="bannerUrl" column="BANNER_URL"/>
+		<result property="msgNum" column="MSG_NUM"/>
+		<result property="sysMsgNum" column="SYS_MSG_NUM"/>
+		<result property="lastSystemTime" column="LAST_SYSTEM_TIME"/>
+		<result property="noLessionTime" column="NO_LESSION_TIME"/>
+		<result property="classId" column="CLASS_ID"/>
+		<result property="idCard" column="ID_CARD"/>
+		<result property="no" column="NO"/>
+	</resultMap>
+	<resultMap id="CourseBase" type="com.inxedu.os.nstar.selectCourse.entity.course.CourseBase">
+		<id column="ID" property="id" />
+		<result column="COURSE_NAME" property="courseName"/>
+		<result column="COURSE_NO" property="courseNo"/>
+		<result column="MEMO" property="memo"/>
+	</resultMap>
+	<!--查询所有的*-->
+	<select id="queryAllUsers" resultMap="User">
+		SELECT * FROM edu_user
+	</select>
+	<select id="queryAllCourses" resultMap="Course">
+		SELECT * FROM edu_course
+	</select>
+	<select id="queryAllCourseBases" resultMap="CourseBase">
+		SELECT * FROM edu_course_base
+	</select>
+	<select id="queryAllStuClasses" resultMap="CourseBase">
+		SELECT * FROM edu_course_base
+	</select>
+</mapper>

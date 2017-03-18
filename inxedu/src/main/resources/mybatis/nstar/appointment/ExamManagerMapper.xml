@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ExamManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.inxedu.os.nstar.appointment.entity.examManager.ExamManager" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="appointment_begin_time" property="appointmentBeginTime" jdbcType="TIMESTAMP" />
+    <result column="appointment_end_time" property="appointmentEndTime" jdbcType="TIMESTAMP" />
+    <result column="exam_name" property="examName" jdbcType="VARCHAR" />
+    <result column="is_course_controller" property="isCourseController" jdbcType="BIT" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, appointment_begin_time, appointment_end_time, exam_name, is_course_controller, 
+    memo
+  </sql>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.inxedu.os.nstar.appointment.entity.examManager.ExamManagerExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from exam_manager
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+<!--通过id进行查询-->
+  <select id="queryExamManagerById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from exam_manager where id = #{id}
+  </select>
+
+<!--根据id进行删除-->
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from exam_manager
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.inxedu.os.nstar.appointment.entity.examManager.ExamManagerExample" >
+    delete from exam_manager
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+<!--添加-->
+  <insert id="insert" parameterType="com.inxedu.os.nstar.appointment.entity.examManager.ExamManager"
+          useGeneratedKeys="true" keyProperty="id" keyColumn="ID"
+  >
+    insert into exam_manager (id, appointment_begin_time, appointment_end_time, 
+      exam_name, is_course_controller, memo, 
+      state)
+    values (#{id,jdbcType=INTEGER}, #{appointmentBeginTime,jdbcType=TIMESTAMP}, #{appointmentEndTime,jdbcType=TIMESTAMP}, 
+      #{examName,jdbcType=VARCHAR}, #{isCourseController,jdbcType=BIT}, #{memo,jdbcType=VARCHAR}, 
+      #{state,jdbcType=BIT})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.inxedu.os.nstar.appointment.entity.examManager.ExamManager" >
+    insert into exam_manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="appointmentBeginTime != null" >
+        appointment_begin_time,
+      </if>
+      <if test="appointmentEndTime != null" >
+        appointment_end_time,
+      </if>
+      <if test="examName != null" >
+        exam_name,
+      </if>
+      <if test="isCourseController != null" >
+        is_course_controller,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="appointmentBeginTime != null" >
+        #{appointmentBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appointmentEndTime != null" >
+        #{appointmentEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examName != null" >
+        #{examName,jdbcType=VARCHAR},
+      </if>
+      <if test="isCourseController != null" >
+        #{isCourseController,jdbcType=BIT},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.inxedu.os.nstar.appointment.entity.examManager.ExamManagerExample" resultType="java.lang.Integer" >
+    select count(*) from exam_manager
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <!--修改-->
+  <update id="update" parameterType="map" >
+    update exam_manager
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.appointmentBeginTime != null" >
+        appointment_begin_time = #{record.appointmentBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.appointmentEndTime != null" >
+        appointment_end_time = #{record.appointmentEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.examName != null" >
+        exam_name = #{record.examName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isCourseController != null" >
+        is_course_controller = #{record.isCourseController,jdbcType=BIT},
+      </if>
+      <if test="record.memo != null" >
+        memo = #{record.memo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map" >
+    update exam_manager
+    set id = #{record.id,jdbcType=INTEGER},
+      appointment_begin_time = #{record.appointmentBeginTime,jdbcType=TIMESTAMP},
+      appointment_end_time = #{record.appointmentEndTime,jdbcType=TIMESTAMP},
+      exam_name = #{record.examName,jdbcType=VARCHAR},
+      is_course_controller = #{record.isCourseController,jdbcType=BIT},
+      memo = #{record.memo,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.inxedu.os.nstar.appointment.entity.examManager.ExamManager" >
+    update exam_manager
+    <set >
+      <if test="appointmentBeginTime != null" >
+        appointment_begin_time = #{appointmentBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appointmentEndTime != null" >
+        appointment_end_time = #{appointmentEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examName != null" >
+        exam_name = #{examName,jdbcType=VARCHAR},
+      </if>
+      <if test="isCourseController != null" >
+        is_course_controller = #{isCourseController,jdbcType=BIT},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.inxedu.os.nstar.appointment.entity.examManager.ExamManager" >
+    update exam_manager
+    set appointment_begin_time = #{appointmentBeginTime,jdbcType=TIMESTAMP},
+      appointment_end_time = #{appointmentEndTime,jdbcType=TIMESTAMP},
+      exam_name = #{examName,jdbcType=VARCHAR},
+      is_course_controller = #{isCourseController,jdbcType=BIT},
+      memo = #{memo,jdbcType=VARCHAR},
+      state = #{state,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--显示所有信息-->
+  <select id="queryExamMangerList" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM exam_manager
+
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="queryExamMangerListCount" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM exam_manager
+  </select>
+
+  <!--根据考试名称查询-->
+  <select id="queryExamManagerByName" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM exam_manager
+    <where>
+      <if test="e.examName!=''">
+        exam_Name = #{e.examName}
+      </if>
+    </where>
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="queryExamManagerByNameCount" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM exam_manager
+    <where>
+      <if test="e.examName!=''">
+        exam_Name = #{e.examName}
+      </if>
+    </where>
+  </select>
+
+  <!--根据考试名称模糊查询-->
+  <select id="queryExamManagesrByName" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM exam_manager
+    <where>
+      <if test="e.examName!=null">
+        AND exam_name LIKE '%${e.examName}%'
+      </if>
+    </where>
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+
+  <select id="queryExamManagesrByNameCount" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM exam_manager
+    <where>
+      <if test="e.examName!=null">
+        AND exam_name LIKE '%${e.examName}%'
+      </if>
+    </where>
+  </select>
+<update id="updateExamManager" parameterType="ExamManager">
+UPDATE `demo_inxedu_v2_0_open`.`exam_manager`
+ SET `appointment_begin_time` = #{appointmentBeginTime} , `appointment_end_time` = #{appointmentEndTime} , `exam_name` = #{examName} , `is_course_controller` = #{isCourseController} , `memo` = #{memo} , `state` = #{state}
+ WHERE `id` =#{id}
+</update>
+  <select id="queryAllExamManager"  resultMap="BaseResultMap">
+    select *
+    from exam_manager
+  </select>
+  <select id="queryExamManagesrByNameNotPage" parameterType="String" resultMap="BaseResultMap">
+    SELECT * FROM exam_manager
+    WHERE exam_name =#{value}
+  </select>
+</mapper>

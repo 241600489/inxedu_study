@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ExamCourseMapper" >
+  <resultMap id="BaseResultMap" type="com.inxedu.os.nstar.appointment.entity.examCourse.ExamCourse" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="course_code" property="courseCode" jdbcType="VARCHAR" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, course_code, course_name, memo
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.inxedu.os.nstar.appointment.entity.examCourse.ExamCourseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from exam_course
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from exam_course
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from exam_course
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.inxedu.os.nstar.appointment.entity.examCourse.ExamCourseExample" >
+    delete from exam_course
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.inxedu.os.nstar.appointment.entity.examCourse.ExamCourse" >
+    insert into exam_course (id, course_code, course_name, 
+      memo)
+    values (#{id,jdbcType=INTEGER}, #{courseCode,jdbcType=VARCHAR}, #{courseName,jdbcType=VARCHAR}, 
+      #{memo,jdbcType=VARCHAR})
+  </insert>
+    <!--更新-->
+  <update id="updateExamCourse" parameterType="ExamCourse" >
+   UPDATE `demo_inxedu_v2_0_open`.`exam_course`
+   SET `course_code` = #{courseCode} ,`course_name` = #{courseName} ,`memo` =#{memo}
+    WHERE `id` = #{id}
+  </update>
+  <select id="queryAllExamCourse" resultMap="BaseResultMap">
+    SELECT  *
+    FROM  exam_course
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="queryAllExamCourseCount" resultType="int">
+    SELECT  COUNT(*)
+    FROM  exam_course
+  </select>
+
+  <select id="queryCourseById" parameterType="Integer" resultMap="BaseResultMap">
+    SELECT  *
+    FROM  exam_course
+    WHERE  id=#{id}
+  </select>
+
+
+  <select id="queryExamCourseBycourseCode" parameterType="map" resultMap="BaseResultMap">
+    SELECT *
+    FROM  exam_course
+    <where>
+      <if test="e.courseCode!=null">
+        AND course_code LIKE  '%${e.courseCode}%'
+      </if>
+    </where>
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+
+  <select id="queryExamCourseBycourseCodeCount" parameterType="map" resultType="int" >
+    SELECT COUNT(*)
+    FROM  exam_course
+    <where>
+      <if test="e.courseCode!=null">
+        AND course_code LIKE  '%${e.courseCode}%'
+      </if>
+    </where>
+  </select>
+  <select id="queryAllExamCorse" resultMap="BaseResultMap">
+  SELECT *
+  FROM  exam_course
+  </select>
+ <!-- 根据课程代码查询课程-->
+  <select id="queryExamCourseByCode" parameterType="ExamCourse" resultMap="BaseResultMap">
+   SELECT *
+   FROM exam_course
+   WHERE  course_code = #{courseCode}
+  </select>
+  <select id="queryAllExamCourseExport" resultMap="BaseResultMap">
+    select * from exam_course
+  </select>
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StuClassMapper">
+    <cache/>
+	<resultMap id="stuClass" type="StuClass">
+		<result property="id" column="id" />
+		<result property="className" column="className" />
+		<result property="description" column="description" />
+		<result property="schoolId" column="schoolId" />
+		<result property="seletableCourseId" column="SeletableCourseId" />
+	</resultMap>
+	<sql id="allFieal">
+		id,
+		className,
+		description,
+		schoolId,
+		seletableCourseId
+	</sql>
+
+	<update id="addClass" parameterType="StuClass">
+		INSERT INTO edu_stuClass(<include refid="allFieal"></include>) VALUES (NULL ,#{className},#{description},#{schoolId},#{seletableCourseId} )
+	</update>
+
+	<delete id="deletebyId" parameterType="int">
+		DELETE FROM edu_stuClass WHERE id = #{VALUE}
+	</delete>
+
+	<update id="updateClass" parameterType="StuClass">
+		UPDATE edu_stuClass SET `className` = #{className} , `description` = #{description} , `schoolId` = #{schoolId}, `SeletableCourseId`= #{seletableCourseId} WHERE `id` = #{id}
+	</update>
+	<update id="updateClas" parameterType="StuClass">
+		UPDATE edu_stuClass SET  `SeletableCourseId` = #{seletableCourseId} WHERE `id` = #{id}
+	</update>
+	<select id="getStuClassList"  resultType="stuClass">
+		SELECT * FROM edu_stuClass
+		<include refid="publicMapper.pageEnd"/>
+	</select>
+	<select id="getStuClassListCount" resultType="Integer">
+		SELECT COUNT(*) FROM edu_stuClass
+	</select>
+
+	<select id="getStuClassById" parameterType="int" resultType="stuClass">
+		SELECT * FROM edu_stuClass WHERE id = #{VALUE }
+	</select>
+
+	<select id="getStuClassListBySchool" parameterType="int" resultType="stuClass">
+		SELECT * FROM edu_stuClass WHERE  schoolId = #{VALUE }
+	</select>
+
+	<select id="search" parameterType="map" resultType="stuClass">
+		SELECT * FROM edu_stuClass
+		<where>
+			<if test="e.className!=null">
+				AND className LIKE '%${e.className}%'
+			</if>
+			<if test="e.schoolId!=null">
+				AND schoolId = #{e.schoolId}
+			</if>
+		</where>
+		<include refid="publicMapper.pageEnd"/>
+	</select>
+	<select id="searchCount" parameterType="map" resultType="Integer">
+		SELECT COUNT(*) FROM edu_stuClass
+		<where>
+			<if test="e.className!=null">
+				AND className LIKE '%${e.className}%'
+			</if>
+			<if test="e.schoolId!=null">
+				AND schoolId = #{e.schoolId}
+			</if>
+		</where>
+	</select>
+	<select id="searchName" parameterType="stuClass" resultType="stuClass">
+		SELECT * FROM edu_stuClass WHERE className=#{className}
+	</select>
+	<!--根据学员院查询班级-->
+	<select id="queryCollegeByCollegeId" parameterType="Integer" resultType="stuClass">
+		SELECT *
+		FROM edu_stuClass
+		WHERE schoolId = #{schoolId}
+	</select>
+	<!--根据className查询班级id-->
+	<select id="queryClassIdByClassName" parameterType="String" resultType="int">
+		SELECT id
+		FROM edu_stuClass
+		WHERE className = #{className}
+	</select>
+	<select id="queryAllStuclass" resultMap="stuClass">
+		SELECT *
+		FROM edu_stuClass
+	</select>
+
+</mapper>

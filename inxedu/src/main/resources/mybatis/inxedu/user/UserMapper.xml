@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+	<sql id="edu_user_column">
+		EDU_USER.USER_ID,
+		EDU_USER.MOBILE,
+		EDU_USER.EMAIL,
+		EDU_USER.PASSWORD,
+		EDU_USER.USER_NAME,
+		EDU_USER.SHOW_NAME,
+		EDU_USER.SEX,
+		EDU_USER.AGE,
+		EDU_USER.CREATE_TIME,
+		EDU_USER.IS_AVALIBLE,
+		EDU_USER.PIC_IMG,
+		EDU_USER.BANNER_URL,
+		EDU_USER.MSG_NUM,
+		EDU_USER.SYS_MSG_NUM,
+		EDU_USER.LAST_SYSTEM_TIME,
+		EDU_USER.NO_LESSION_TIME,
+		EDU_USER.CLASS_ID,
+		ID_CARD,
+		NO
+	</sql>
+	<sql id="edu_user_property">
+		#{userId},
+		#{mobile},
+		#{email},
+		#{password},
+		#{userName},
+		#{showName},
+		#{sex},
+		#{age},
+		#{createTime},
+		#{isavalible},
+		#{picImg},
+		#{bannerUrl},
+		#{msgNum},
+		#{sysMsgNum},
+		#{lastSystemTime},
+		#{noLessionTime},
+		#{classId},
+		#{idCard},
+		#{no}
+	</sql>
+	<resultMap type="User" id="UserResult">
+		<result property="userId" column="USER_ID"/>
+		<result property="mobile" column="MOBILE"/>
+		<result property="email" column="EMAIL"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="userName" column="USER_NAME"/>
+		<result property="showName" column="SHOW_NAME"/>
+		<result property="sex" column="SEX"/>
+		<result property="age" column="AGE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="isavalible" column="IS_AVALIBLE"/>
+		<result property="picImg" column="PIC_IMG"/>
+		<result property="bannerUrl" column="BANNER_URL"/>
+		<result property="msgNum" column="MSG_NUM"/>
+		<result property="sysMsgNum" column="SYS_MSG_NUM"/>
+		<result property="lastSystemTime" column="LAST_SYSTEM_TIME"/>
+		<result property="noLessionTime" column="NO_LESSION_TIME"/>
+		<result property="classId" column="CLASS_ID"/>
+		<result property="idCard" column="ID_CARD"/>
+		<result property="no" column="NO"/>
+	</resultMap>
+
+	<!-- 娉ㄥ唽鍒涘缓鐢ㄦ埛 -->
+	<insert id="createUser" parameterType="User" useGeneratedKeys="true" keyColumn="USER_ID" keyProperty="userId">
+		INSERT INTO EDU_USER(<include refid="edu_user_column"/>)
+		VALUE(<include refid="edu_user_property"/>)
+	</insert>
+
+	<!-- 閫氳繃鐢ㄦ埛ID锛屾煡璇㈢敤鎴疯褰� -->
+	<select id="queryUserById" parameterType="int" resultMap="UserResult">
+		SELECT <include refid="edu_user_column"/> FROM EDU_USER WHERE EDU_USER.USER_ID=#{value}
+	</select>
+
+
+
+	<!-- 鏌ヨ鎵嬫満鏄惁瀛樺湪 -->
+	<select id="checkMobile" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(1) FROM EDU_USER WHERE EDU_USER.MOBILE=#{value}
+	</select>
+	<!-- 鏌ヨ閭鍙锋槸鍚﹀瓨鍦� -->
+	<select id="checkEmail" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(1) FROM EDU_USER WHERE EDU_USER.EMAIL=#{value}
+	</select>
+	<!-- 鐢ㄦ埛鐧诲綍 (鎵嬫満鎴栭偖绠卞潎鍙櫥褰�)
+	<select id="getLoginUser" parameterType="java.util.Map" resultMap="UserResult">
+		SELECT <include refid="edu_user_column"/> FROM EDU_USER
+		WHERE EDU_USER.PASSWORD=#{password} AND (EDU_USER.MOBILE=#{account} OR EDU_USER.EMAIL=#{account})
+	</select>
+	-->
+	<select id="getLoginUser" parameterType="java.util.Map" resultMap="UserResult">
+		SELECT <include refid="edu_user_column"/> FROM EDU_USER
+		WHERE EDU_USER.PASSWORD=#{password} AND EDU_USER.NO=#{account}
+	</select>
+	<!-- 淇敼瀛﹀憳瀵嗙爜 -->
+	<update id="updateUser" parameterType="User">
+		UPDATE EDU_USER SET
+		EDU_USER.MOBILE=#{mobile},
+		EDU_USER.EMAIL=#{email},
+		EDU_USER.CLASS_ID=#{classId}
+		WHERE EDU_USER.USER_ID=#{userId}
+	</update>
+	<update id="updateUserPwd" parameterType="User">
+		UPDATE EDU_USER SET
+		EDU_USER.PASSWORD=#{password}
+		WHERE EDU_USER.USER_ID=#{userId}
+	</update>
+	<!-- 鍒嗛〉鏌ヨ鐢ㄦ埛鍒楄〃锛屽紑濮� -->
+	<select id="queryUserListPage" parameterType="java.util.Map" resultMap="UserResult">
+		SELECT <include refid="edu_user_column"/> FROM EDU_USER
+		<where>
+			<if test="e.isavalible>0">
+				EDU_USER.IS_AVALIBLE=#{e.isavalible}
+			</if>
+			<if test="e.keyWord!=null and e.keyWord!=''">
+				AND (EDU_USER.MOBILE LIKE CONCAT('%',#{e.keyWord},'%') OR EDU_USER.EMAIL LIKE CONCAT('%',#{e.keyWord},'%') OR EDU_USER.USER_NAME LIKE CONCAT('%',#{e.keyWord},'%') OR EDU_USER.SHOW_NAME LIKE CONCAT('%',#{e.keyWord},'%'))
+			</if>
+			<if test="e.beginCreateTime!=null and e.beginCreateTime!=''">
+				AND EDU_USER.CREATE_TIME >= #{e.beginCreateTime}
+			</if>
+			<if test="e.endCreateTime!=null and e.endCreateTime!=''">
+				AND <![CDATA[EDU_USER.CREATE_TIME <= #{e.endCreateTime}]]>
+			</if>
+			<if test="e.no!=null and e.no!=''">
+				AND  EDU_USER.NO=#{e.no}
+			</if>
+			<if test="e.classId!=null and e.classId!=''">
+				AND EDU_USER.CLASS_ID=#{e.classId}
+			</if>
+		</where>
+		<include refid="publicMapper.pageEnd"/>
+	</select>
+	<select id="queryUserListPageCount" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(1) FROM EDU_USER
+		<where>
+			<if test="e.isavalible>0">
+				EDU_USER.IS_AVALIBLE=#{e.isavalible}
+			</if>
+			<if test="e.keyWord!=null and e.keyWord!=''">
+				AND (EDU_USER.MOBILE LIKE CONCAT('%',#{e.keyWord},'%') OR EDU_USER.EMAIL LIKE CONCAT('%',#{e.keyWord},'%') OR EDU_USER.USER_NAME LIKE CONCAT('%',#{e.keyWord},'%') OR EDU_USER.SHOW_NAME LIKE CONCAT('%',#{e.keyWord},'%'))
+			</if>
+			<if test="e.beginCreateTime!=null and e.beginCreateTime!=''">
+				AND EDU_USER.CREATE_TIME >= #{e.beginCreateTime}
+			</if>
+			<if test="e.endCreateTime!=null and e.endCreateTime!=''">
+				AND <![CDATA[EDU_USER.CREATE_TIME <= #{e.endCreateTime}]]>
+			</if>
+			<if test="e.classId!=null and e.classId!=''">
+				AND EDU_USER.CLASS_ID=#{e.classId}
+			</if>
+		</where>
+	</select>
+	<!-- 鍒嗛〉鏌ヨ鐢ㄦ埛鍒楄〃锛岀粨鏉�-->
+
+	<!-- 鍐荤粨鎴栬В鍐荤敤鎴� -->
+	<update id="updateUserStates" parameterType="User">
+		UPDATE EDU_USER SET EDU_USER.IS_AVALIBLE=#{isavalible} WHERE EDU_USER.USER_ID=#{userId}
+	</update>
+	<!-- 淇敼鐢ㄦ埛澶村儚 -->
+	<update id="updateImg" parameterType="User">
+		UPDATE EDU_USER SET
+		EDU_USER.PIC_IMG=#{picImg}
+		WHERE EDU_USER.USER_ID=#{userId}
+	</update>
+
+	<!-- 淇敼涓腑蹇冧釜鎬у寲鍥剧墖URL -->
+	<update id="updateUserBannerUrl" parameterType="User">
+		UPDATE EDU_USER SET BANNER_URL=#{bannerUrl} WHERE USER_ID=#{userId}
+	</update>
+
+	<!-- 鏌ヨ鎵�鏈夊鍛樿褰曟暟 -->
+	<select id="queryAllUserCount" resultType="int">
+		SELECT COUNT(1) FROM EDU_USER
+	</select>
+
+	<!-- 閫氳繃鎵嬫満鍙锋垨閭鍙锋煡璇㈢敤鎴蜂俊鎭� -->
+	<select id="queryUserByEmailOrMobile" parameterType="java.lang.String" resultMap="UserResult">
+		SELECT <include refid="edu_user_column"/> FROM EDU_USER WHERE EMAIL=#{value} OR MOBILE=#{value} LIMIT 1
+	</select>
+
+	<!-- 鏍规嵁澶氫釜鐢ㄦ埛id鑾峰彇鐢ㄦ埛淇℃伅 -->
+	<select id="queryCustomerInCusIds" parameterType="java.util.HashMap" resultMap="UserResult">
+		select
+		<include refid="edu_user_column"/>
+		from EDU_USER
+		where EDU_USER.USER_ID in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- 鏇存柊鎻愰啋鐨勬秷鎭暟閲� +1-->
+	<update id="updateUnReadMsgNumAddOne" parameterType="java.util.HashMap">
+		update EDU_USER set
+		<if test="falg=='msgNum'">
+			msg_num=msg_num+1
+		</if>
+		<if test="falg=='sysMsgNum'">
+			sys_msg_num=sys_msg_num+1
+		</if>
+		where
+		USER_ID=#{cusId}
+	</update>
+
+	<!-- 涓嶅尯鍒嗘秷鎭被鍨� -->
+	<update id="updateUnReadMsgNumReset" parameterType="java.util.HashMap">
+		update EDU_USER set
+		MSG_NUM=0,
+		SYS_MSG_NUM=0
+		where
+		USER_ID=#{cusId}
+	</update>
+
+	<!-- 鏇存柊鏈�鍚庢彁閱掓秷鎭殑鏃堕棿 -->
+	<update id="updateCusForLST" parameterType="java.util.HashMap">
+		update EDU_USER set LAST_SYSTEM_TIME=#{date} where
+		USER_ID=#{cusId}
+	</update>
+
+	<select id="getUserListPage" resultMap="UserResult" parameterType="java.util.HashMap">
+		select
+		<include refid="edu_user_column" />
+		from edu_user
+		<where>
+			<if test="e.userId !=null and e.userId > 0 ">
+				AND EDU_USER.USER_ID = #{e.userId}
+			</if>
+			<if test="e.email !=null and e.email !='' ">
+				AND EDU_USER.EMAIL like CONCAT('%',#{e.email},'%')
+			</if>
+			<if test="e.mobile !=null and e.mobile !='' ">
+				AND EDU_USER.MOBILE like CONCAT('%',#{e.mobile},'%')
+			</if>
+			<if test="e.userName !=null and e.userName !='' ">
+				AND EDU_USER.USER_NAME like CONCAT('%',#{e.userName},'%')
+			</if>
+			<if test="e.showName !=null and e.showName !='' ">
+				AND EDU_USER.SHOW_NAME like CONCAT('%',#{e.showName},'%')
+			</if>
+			<if test="e.sex !=null and e.sex > 0 ">
+				AND EDU_USER.SEX=#{e.sex}
+			</if>
+		</where>
+		order by EDU_USER.USER_ID desc
+		<include refid="publicMapper.pageEnd" />
+	</select>
+	<select id="getUserListPageCount" resultType="int" parameterType="java.util.HashMap">
+		select
+		count(1)
+		from edu_user
+		<where>
+			<if test="e.userId !=null and e.userId > 0 ">
+				AND EDU_USER.USER_ID = #{e.userId}
+			</if>
+			<if test="e.email !=null and e.email !='' ">
+				AND EDU_USER.EMAIL like CONCAT('%',#{e.email},'%')
+			</if>
+			<if test="e.mobile !=null and e.mobile !='' ">
+				AND EDU_USER.MOBILE like CONCAT('%',#{e.mobile},'%')
+			</if>
+			<if test="e.userName !=null and e.userName !='' ">
+				AND EDU_USER.USER_NAME like CONCAT('%',#{e.userName},'%')
+			</if>
+			<if test="e.showName !=null and e.showName !='' ">
+				AND EDU_USER.SHOW_NAME like CONCAT('%',#{e.showName},'%')
+			</if>
+			<if test="e.sex !=null and e.sex > 0 ">
+				AND EDU_USER.SEX=#{e.sex}
+			</if>
+		</where>
+	</select>
+
+	<update id="updateUserInfo" parameterType="User">
+		UPDATE edu_user SET ID_CARD = #{idCard},NO = #{no} WHERE USER_ID= #{userId}
+	</update>
+	<update id="updateUserWithClassId" parameterType="User">
+		UPDATE EDU_USER SET
+		EDU_USER.USER_NAME=#{userName},
+		EDU_USER.SHOW_NAME=#{showName},
+		EDU_USER.SEX=#{sex},
+		EDU_USER.AGE=#{age},
+		EDU.USER.CLASS_ID=#{classId},
+		WHERE EDU_USER.USER_ID=#{userId}
+	</update>
+	<update id="updateClassIdByUserId" parameterType="map">
+		update EDU_USER SET
+		 CLASS_ID =#{classId}
+		 WHERE EDU_USER.USER_ID=#{userId}
+	</update>
+	<select id="queryUserByClassId" parameterType="map" resultMap="UserResult">
+		SELECT  *
+		FROM  edu_user
+		WHERE EDU_USER.CLASS_ID=#{e.classId}
+		<include refid="publicMapper.pageEnd"/>
+	</select>
+	<select id="queryUserByClassIdCount" parameterType="map" resultType="int">
+		SELECT  COUNT(*)
+		FROM  edu_user
+		WHERE EDU_USER.CLASS_ID=#{e.classId}
+	</select>
+	<select id="queryUserByNo" resultMap="UserResult" parameterType="map">
+		SELECT  *
+		FROM  edu_user
+		<where>
+			<if test="e.no!=null and e.no!=''">
+			AND NO=#{e.no}
+			</if>
+		</where>
+
+		<include refid="publicMapper.pageEnd"/>
+	</select>
+
+	<select id="queryUserByNoCount" resultType="int" parameterType="map">
+		SELECT  COUNT(*)
+		FROM  edu_user
+		<where>
+			<if test="e.no!=null and e.no!=''">
+				AND NO=#{e.no}
+			</if>
+		</where>
+	</select>
+	<select id="queryAllUsers" resultMap="UserResult">
+		SELECT *
+		FROM edu_user
+	</select>
+	<select id="queryUserIdByNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+			SELECT USER_ID
+		FROM edu_user
+		WHERE NO = #{VALUE }
+	</select>
+	<select id="queryUserByStudentNoNotPage" parameterType="java.lang.String" resultMap="UserResult">
+		SELECT *
+		FROM edu_user
+		WHERE NO = #{VALUE}
+	</select>
+	<insert id="insertList" parameterType="java.util.List">
+		insert INTO edu_user
+		(
+		EDU_USER.PASSWORD,
+		EDU_USER.USER_NAME,
+		EDU_USER.SEX,
+		EDU_USER.CREATE_TIME,
+		EDU_USER.CLASS_ID,
+		ID_CARD,
+		NO)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+			#{item.password},
+			#{item.userName},
+			#{item.sex},
+			#{item.createTime},
+			#{item.classId},
+			#{item.idCard},
+			#{item.no})
+		</foreach>
+	</insert>
+	<select id="queryUserByIdAndClassId" parameterType="User" resultMap="UserResult">
+		SELECT *
+		FROM  edu_user
+		WHERE EDU_USER.NO=#{no} AND EDU_USER.CLASS_ID=#{classId}
+	</select>
+</mapper>

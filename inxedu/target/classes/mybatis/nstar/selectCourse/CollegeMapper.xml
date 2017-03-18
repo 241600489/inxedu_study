@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CollegeMapper">
+
+	<resultMap type="com.inxedu.os.nstar.selectCourse.entity.college.College" id="College">
+		<result property="id" column="id"/>
+		<result property="collegeCode" column="collegeCode"/>
+		<result property="collegeName" column="collegeName"/>
+		<result property="description" column="description"/>
+	</resultMap>
+
+	<sql id="allCollege">
+		id,
+		collegeCode,
+		collegeName,
+		description
+	</sql>
+	<!--添加学院-->
+	<insert id="addCollege" parameterType="College">
+		insert into edu_college(<include refid="allCollege"></include>) values (null,#{collegeCode},#{collegeName},#{description})
+	</insert>
+	
+	<!--通过id删除（单个）-->
+	<delete id="deletebyId" parameterType="int">
+		Delete from edu_college where id = #{value}
+	</delete>
+
+	<!--修改学院-->
+	<update id="updateCollege" parameterType="College">
+		UPDATE `edu_college` SET `collegeCode` = #{collegeCode} , `collegeName` = #{collegeName} , `description` = #{description} WHERE `id` = #{id}
+	</update>
+
+	<!--获取学院列表-->
+	<select id="getCollegeList" resultType="College">
+		select * from edu_college
+		<include refid="publicMapper.pageEnd"/>
+	</select>
+
+	<!--根据id获取学院-->
+	<select id="getCollegeById" parameterType="int" resultType="College">
+		select * from edu_college where id = #{value}
+	</select>
+
+	<!--根据某一个条件获取学院信息-->
+	<select id="getByAllFiled" parameterType="College" resultMap="College">
+		SELECT * FROM edu_college WHERE collegeCode = #{collegeCode} OR collegeName = #{collegeName} OR description = #{description}
+	</select>
+
+	<!--查询所有的id-->
+	<select id="queryIds" resultType="College">
+		SELECT  *
+		FROM  edu_college
+	</select>
+
+	<!--根据id查询学院名称-->
+	<select id="queryNames" parameterType="Integer" resultType="String">
+		SELECT  collegeName
+		FROM edu_college
+		WHERE id=#{value}
+	</select>
+	<!--查询所有的*-->
+	<select id="queryCollege" resultType="College">
+		select * from edu_college
+	</select>
+	<!--总共有多少个数-->
+	<select id="getCollegeListCount" resultType="Integer">
+		SELECT COUNT(*) FROM edu_college
+	</select>
+	<select id="queryCollegeByName" parameterType="String" resultType="Integer">
+		SELECT  id
+		FROM edu_college
+		WHERE collegeName=#{value}
+	</select>
+</mapper>

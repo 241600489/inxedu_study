@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CourseBaseMapper" >
+  <resultMap id="BaseResultMap" type="CourseBase">
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="COURSE_NAME" property="courseName" jdbcType="VARCHAR" />
+    <result column="COURSE_NO" property="courseNo" jdbcType="VARCHAR" />
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="eduCourseBase" type="CourseBase">
+    <id column="ID" property="id" />
+    <result column="COURSE_NAME" property="courseName"/>
+    <result column="COURSE_NO" property="courseNo"/>
+    <result column="MEMO" property="memo"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, COURSE_NAME, COURSE_NO, MEMO
+  </sql>
+  <!--根据courseNo来查id-->
+  <select id="queryIdBycourseId" resultType="Integer" parameterType="String">
+    SELECT  ID
+    FROM   edu_course_base
+    WHERE  COURSE_NO=#{courseNo}
+
+  </select>
+  <!--根据课程名来查id-->
+  <select id="queryCourseIdByName" parameterType="String" resultType="Integer">
+    SELECT  ID
+    FROM edu_course_base
+    WHERE COURSE_NAME=#{courseName}
+
+  </select>
+  <!--根据id查询名称-->
+  <select id="queryBaseCourseNameById" parameterType="int" resultType="String">
+    SELECT  COURSE_NAME
+    FROM  edu_course_base
+    WHERE ID=#{id}
+  </select>
+  <!--  查询课程名称-->
+  <select id="queryBaseCourseName" resultType="map">
+    SELECT  ID,COURSE_NAME,COURSE_NO,MEMO FROM edu_course_base
+  </select>
+
+  <!--根据主键删除-->
+  <delete id="deleteByPrimaryKey" parameterType="Integer" >
+    DELETE FROM `demo_inxedu_v2_0_open`.`edu_course_base` WHERE `ID` = #{VALUE }
+  </delete>
+  <!--添加一组数据-->
+  <insert id="addBaseCourse" parameterType="CourseBase">
+    INSERT INTO edu_course_base(<include refid="Base_Column_List"></include>) VALUES (NULL ,#{courseName},#{courseNo},#{memo})
+  </insert>
+  <!--修改-->
+  <update id="updateBaseCourse" parameterType="CourseBase">
+    UPDATE
+    `demo_inxedu_v2_0_open`.`edu_course_base`
+    SET
+    `COURSE_NAME` = #{courseName},
+    `COURSE_NO` = #{courseNo},
+    `MEMO` = #{memo}
+    WHERE `ID` = #{id}
+  </update>
+  <!--根据课程名或课程号查询-->
+  <select id="query" parameterType="map" resultType="map">
+    SELECT * FROM edu_course_base
+    <where>
+      <if test="e.courseName!=null">
+        AND COURSE_NAME LIKE '%${e.courseName}%'
+      </if>
+      <if test="e.courseNo!=null">
+        AND COURSE_NO = #{e.courseNo}
+      </if>
+    </where>
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="queryCount" parameterType="map" resultType="Integer">
+    SELECT COUNT(*) FROM edu_course_base
+    <where>
+      <if test="e.courseName!=null">
+        AND COURSE_NAME LIKE '%${e.courseName}%'
+      </if>
+      <if test="e.courseNo!=null">
+        AND COURSE_NO = #{e.courseNo}
+      </if>
+    </where>
+  </select>
+  <!--查询所有数据-->
+  <select id="queryAllCourseBase" resultType="map">
+    SELECT ID, COURSE_NAME, COURSE_NO, MEMO
+    FROM edu_course_base
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="queryAllCourseBaseCount" resultType="Integer">
+    SELECT COUNT(*)
+    FROM edu_course_base
+  </select>
+  <!--根据id查询数据-->
+  <select id="queryByPrimaryKey" parameterType="Integer" resultType="map">
+    SELECT  ID, COURSE_NAME, COURSE_NO, MEMO
+    FROM  edu_course_base
+    WHERE  ID=#{id}
+  </select>
+  <!--查询课程号-->
+  <select id="queryCourseNo" resultType="String">
+    SELECT  COURSE_NO
+    FROM  edu_course_base
+  </select>
+  <select id="queryCourseNoByCourseName" resultMap="BaseResultMap">
+    SELECT  *
+    FROM  edu_course_base
+    WHERE  COURSE_NAME=#{courseName}
+  </select>
+  <!--根据学号查询-->
+  <select id="queryCourseBaseByNo" parameterType="CourseBase" resultMap="BaseResultMap">
+    SELECT *
+    FROM edu_course_base
+    WHERE COURSE_NO=#{courseNo}
+  </select>
+  <select id="queryCoueBase" resultMap="BaseResultMap">
+    SELECT *
+    FROM edu_course_base
+  </select>
+</mapper>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="inxedu:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="inxedu.war">
+      <element id="artifact" artifact-name="inxedu:war exploded" />
+    </root>
+  </artifact>
+</component>

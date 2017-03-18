@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CourseControllerMappper" >
+  <resultMap id="edu" type="CourseController" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="begin_course_signup_time0" property="beginCourseSignupTime0"  />
+    <result column="begin_course_signup_time1" property="beginCourseSignupTime1"  />
+    <result column="end_course_signup_time0" property="endCourseSignupTime0" />
+    <result column="end_course_signup_time1" property="endCourseSignupTime1" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="update_man" property="updateMan" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="selectController" resultMap="edu">
+    SELECT * FROM edu_course_controller WHERE id = 1
+  </select>
+  <update id="updateController" parameterType="CourseController">
+    UPDATE
+      edu_course_controller
+    SET
+      begin_course_signup_time0 = #{beginCourseSignupTime0},
+      begin_course_signup_time1 = #{beginCourseSignupTime1},
+      end_course_signup_time0 = #{endCourseSignupTime0},
+      end_course_signup_time1 = #{endCourseSignupTime1},
+      memo = #{memo},
+      update_date = #{updateDate},
+      update_man = #{updateMan},
+      type=#{type}
+    WHERE id = 1
+  </update>
+</mapper>

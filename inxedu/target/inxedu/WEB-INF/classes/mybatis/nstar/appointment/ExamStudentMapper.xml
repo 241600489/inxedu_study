@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ExamStudentMapper" >
+  <resultMap id="BaseResultMap" type="com.inxedu.os.nstar.appointment.entity.examStudent.ExamStudent" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="course_code" property="courseCode" jdbcType="VARCHAR" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="student_class" property="studentClass" jdbcType="VARCHAR" />
+    <result column="student_name" property="studentName" jdbcType="VARCHAR" />
+    <result column="student_no" property="studentNo" jdbcType="VARCHAR" />
+    <result column="lock" property="lock" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, course_code, course_name, memo, student_class, student_name, student_no, lock
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.inxedu.os.nstar.appointment.entity.examStudent.ExamStudentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from exam_student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from exam_student
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from exam_student
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.inxedu.os.nstar.appointment.entity.examStudent.ExamStudentExample" >
+    delete from exam_student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.inxedu.os.nstar.appointment.entity.examStudent.ExamStudent" >
+   INSERT INTO `demo_inxedu_v2_0_open`.`exam_student` (`id`, `course_code`, `course_name`, `memo`, `student_class`, `student_name`, `student_no`, `lock`)
+    VALUES (null, #{courseCode}, #{courseName}, #{memo}, #{studentClass}, #{studentName}, #{studentNo}, #{lock})
+  </insert>
+  <insert id="insertSelective" parameterType="com.inxedu.os.nstar.appointment.entity.examStudent.ExamStudent" >
+    insert into exam_student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="courseCode != null" >
+        course_code,
+      </if>
+      <if test="courseName != null" >
+        course_name,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+      <if test="studentClass != null" >
+        student_class,
+      </if>
+      <if test="studentName != null" >
+        student_name,
+      </if>
+      <if test="studentNo != null" >
+        student_no,
+      </if>
+      <if test="lock != null" >
+        lock,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="courseCode != null" >
+        #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="courseName != null" >
+        #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="studentClass != null" >
+        #{studentClass,jdbcType=VARCHAR},
+      </if>
+      <if test="studentName != null" >
+        #{studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="studentNo != null" >
+        #{studentNo,jdbcType=VARCHAR},
+      </if>
+      <if test="lock != null" >
+        #{lock,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.inxedu.os.nstar.appointment.entity.examStudent.ExamStudentExample" resultType="java.lang.Integer" >
+    select count(*) from exam_student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update exam_student
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.courseCode != null" >
+        course_code = #{record.courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.courseName != null" >
+        course_name = #{record.courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memo != null" >
+        memo = #{record.memo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.studentClass != null" >
+        student_class = #{record.studentClass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.studentName != null" >
+        student_name = #{record.studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.studentNo != null" >
+        student_no = #{record.studentNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lock != null" >
+        lock = #{record.lock,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update exam_student
+    set id = #{record.id,jdbcType=INTEGER},
+      course_code = #{record.courseCode,jdbcType=VARCHAR},
+      course_name = #{record.courseName,jdbcType=VARCHAR},
+      memo = #{record.memo,jdbcType=VARCHAR},
+      student_class = #{record.studentClass,jdbcType=VARCHAR},
+      student_name = #{record.studentName,jdbcType=VARCHAR},
+      student_no = #{record.studentNo,jdbcType=VARCHAR},
+      lock = #{record.lock,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inxedu.os.nstar.appointment.entity.examStudent.ExamStudent" >
+    update exam_student
+    <set >
+      <if test="courseCode != null" >
+        course_code = #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="courseName != null" >
+        course_name = #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="studentClass != null" >
+        student_class = #{studentClass,jdbcType=VARCHAR},
+      </if>
+      <if test="studentName != null" >
+        student_name = #{studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="studentNo != null" >
+        student_no = #{studentNo,jdbcType=VARCHAR},
+      </if>
+      <if test="lock != null" >
+        lock = #{lock,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inxedu.os.nstar.appointment.entity.examStudent.ExamStudent" >
+  UPDATE `demo_inxedu_v2_0_open`.`exam_student`
+  SET `course_code` = #{courseCode} , `course_name` = #{courseName} , `memo` =#{memo} , `student_class` =#{studentClass} , `student_name` = #{studentName} , `student_no` =#{studentNo} , `lock` = #{lock}
+  WHERE `id` = #{id}
+  </update>
+  <!--查询所有数据-->
+  <select id="queryAllExamStudent" resultMap="BaseResultMap">
+    SELECT *
+    FROM  exam_student
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="queryAllExamStudentExport" resultMap="BaseResultMap">
+    SELECT *
+    FROM  exam_student
+  </select>
+  <select id="queryAllExamStudentCount" resultType="int">
+    SELECT  COUNT(*)
+    FROM  exam_student
+  </select>
+  <!--根据id查询-->
+  <select id="queryExamStudentById" parameterType="Integer" resultMap="BaseResultMap">
+    SELECT  *
+    FROM  exam_student
+    WHERE  id=#{value}
+  </select>
+  <select id="queryExamStudentByMohu" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM exam_student
+    <where>
+      <if test="e.teacherId!=0">
+        AND teacher_id =#{e.teacherId}
+      </if>
+      <if test="e.studentClass!=null">
+        AND student_class LIKE '%${e.studentClass}%'
+      </if>
+      <if test="e.studentName!=null">
+        AND student_name LIKE '%${e.studentName}%'
+      </if>
+      <if test="e.studentNo!=null">
+        AND student_no = #{e.studentNo}
+      </if>
+    </where>
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="queryExamStudentByMohuCount" parameterType="map" resultType="Integer">
+    SELECT COUNT(*) FROM exam_student
+    <where>
+      <if test="e.teacherId!=0">
+        AND teacher_id =#{e.teacherId}
+      </if>
+      <if test="e.studentClass!=null">
+        AND student_class LIKE '%${e.studentClass}%'
+      </if>
+      <if test="e.studentName!=null">
+        AND student_name LIKE '%${e.studentName}%'
+      </if>
+      <if test="e.studentNo!=null">
+        AND student_no = #{e.studentNo}
+      </if>
+    </where>
+  </select>
+  <select id="selectByStudentNo" resultMap="BaseResultMap"
+    parameterType="java.lang.String">
+    select
+    *
+    from exam_student
+    where student_no = #{studentNo}
+  </select>
+  <select id="queryAllExamStudentVerlidate" resultMap="BaseResultMap">
+    SELECT *
+    FROM exam_student
+  </select>
+  <select id="queryExamStudentByTeacherIdAndSno" parameterType="QueryExamStudent" resultMap="BaseResultMap">
+    SELECT *
+    FROM  exam_student
+    WHERE  TEACHER_ID=#{teacherId} and student_no=#{studentNo}
+  </select>
+  <select id="queryExamStudentByTeacherId" parameterType="Map" resultMap="BaseResultMap">
+    SELECT *
+    FROM exam_student
+    WHERE  TEACHER_ID=#{e.teacherId}
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="queryExamStudentByTeacherIdCount" parameterType="Map" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM exam_student
+    WHERE  TEACHER_ID=#{e.teacherId}
+  </select>
+  <select id="queryNoExamAppointmentStudentByTeacherIdAndExamName" parameterType="Map" resultMap="BaseResultMap">
+    SELECT  a.`student_no` ,a.`course_code`,a.`course_name`,a.`student_class`,a.`student_name`,a.`lock`
+      FROM exam_student a
+      <where>
+          <if test="e.studentName!=null">
+              AND  a.student_name LIKE  '%${e.studentName}%'
+          </if>
+          <if test="e.studentNo!=null">
+              AND a.student_no=#{e.studentNo}
+          </if>
+          <if test="e.studentClass!=null">
+              AND a.student_class LIKE '%${e.studentClass}%'
+          </if>
+          AND a.`teacher_Id`=#{e.teacherId}
+          AND a.`student_no`
+          NOT IN (SELECT c.`student_no` FROM exam_student_appointment c
+          WHERE c.`exam_name`=#{e.examName})
+      </where>
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="queryNoExamAppointmentStudentByTeacherIdAndExamNameCount" parameterType="Map" resultType="java.lang.Integer">
+    SELECT  COUNT(*) FROM exam_student a
+     <where>
+         <if test="e.studentName!=null">
+             AND  a.student_name LIKE  '%${e.studentName}%'
+         </if>
+         <if test="e.studentNo!=null">
+             AND a.student_no=#{e.studentNo}
+         </if>
+         <if test="e.studentClass!=null">
+             AND a.student_class LIKE '%${e.studentClass}%'
+         </if>
+         AND a.`teacher_Id`=#{e.teacherId}
+          AND a.`student_no` NOT IN
+         (SELECT c.`student_no` FROM exam_student_appointment c
+        WHERE c.`exam_name`=#{e.examName})
+     </where>
+  </select>
+</mapper>

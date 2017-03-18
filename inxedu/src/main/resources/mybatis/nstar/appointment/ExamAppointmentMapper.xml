@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ExamAppointmentMapper">
+
+
+    <resultMap id="ExamStudent" type="com.inxedu.os.nstar.appointment.entity.examStudent.ExamStudent">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="course_code" property="courseCode" jdbcType="VARCHAR"/>
+        <result column="course_name" property="courseName" jdbcType="VARCHAR"/>
+        <result column="memo" property="memo" jdbcType="VARCHAR"/>
+        <result column="student_class" property="studentClass" jdbcType="VARCHAR"/>
+        <result column="student_name" property="studentName" jdbcType="VARCHAR"/>
+        <result column="student_no" property="studentNo" jdbcType="VARCHAR"/>
+        <result column="lock" property="lock" jdbcType="BIT"/>
+    </resultMap>
+    <resultMap id="ExamBatch" type="com.inxedu.os.nstar.appointment.entity.examBatch.ExamBatch">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="appointment_count" property="appointmentCount" jdbcType="INTEGER"/>
+        <result column="course_id" property="courseId" jdbcType="INTEGER"/>
+        <result column="course_name" property="courseName" jdbcType="VARCHAR"/>
+        <result column="course_no" property="courseNo" jdbcType="VARCHAR"/>
+        <result column="exam_batch_no" property="examBatchNo" jdbcType="INTEGER"/>
+        <result column="exam_begin_end_time" property="examBeginEndTime" jdbcType="VARCHAR"/>
+        <result column="exam_classroom" property="examClassroom" jdbcType="VARCHAR"/>
+        <result column="exam_date" property="examDate" jdbcType="TIMESTAMP"/>
+        <result column="memo" property="memo" jdbcType="VARCHAR"/>
+        <result column="number" property="number" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="BIT"/>
+        <result column="exam_name" property="examName" jdbcType="VARCHAR"/>
+        <result column="exam_manager_id" property="examManagerId" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ExamManager" type="com.inxedu.os.nstar.appointment.entity.examManager.ExamManager">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="appointment_begin_time" property="appointmentBeginTime" jdbcType="TIMESTAMP"/>
+        <result column="appointment_end_time" property="appointmentEndTime" jdbcType="TIMESTAMP"/>
+        <result column="exam_name" property="examName" jdbcType="VARCHAR"/>
+        <result column="is_course_controller" property="isCourseController" jdbcType="BIT"/>
+        <result column="memo" property="memo" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="BIT"/>
+    </resultMap>
+    <resultMap id="ExamStudentAppointment"
+               type="com.inxedu.os.nstar.appointment.entity.examStudentAppointment.ExamStudentAppointment">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="batch_no" property="batchNo" jdbcType="INTEGER"/>
+        <result column="exam_classroom" property="examClassroom" jdbcType="VARCHAR"/>
+        <result column="exam_date" property="examDate" jdbcType="TIMESTAMP"/>
+        <result column="exam_name" property="examName" jdbcType="VARCHAR"/>
+        <result column="memo" property="memo" jdbcType="VARCHAR"/>
+        <result column="score" property="score" jdbcType="VARCHAR"/>
+        <result column="seat_no" property="seatNo" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="BIT"/>
+        <result column="student_class" property="studentClass" jdbcType="VARCHAR"/>
+        <result column="student_name" property="studentName" jdbcType="VARCHAR"/>
+        <result column="student_no" property="studentNo" jdbcType="VARCHAR"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="exam_begin_end_times" property="examBeginEndTimes" jdbcType="VARCHAR"/>
+        <result column="exam_batch_id" property="examBatchId" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ExamSeat" type="com.inxedu.os.nstar.appointment.entity.examSeat.ExamSeat">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="exam_batch_id" property="examBatchId" jdbcType="INTEGER"/>
+        <result column="exam_classroom_name" property="examClassroomName" jdbcType="VARCHAR"/>
+        <result column="seat_no" property="seatNo" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="ExamManagerP">
+		id, appointment_begin_time, appointment_end_time, exam_name, is_course_controller,
+		memo, state
+	</sql>
+    <sql id="ExamBatchP">
+		id, appointment_count, course_id, course_name, course_no, exam_batch_no, exam_begin_end_time,
+		exam_classroom, exam_date, memo, number, state,exam_name,exam_manager_id
+	</sql>
+    <sql id="ExamStudentP">
+		id, course_code, course_name, memo, student_class, student_name, student_no, `lock`
+	</sql>
+    <sql id="ExamStudentAppointmentP">
+		id, batch_no, exam_classroom, exam_date, exam_name, memo, score, seat_no, state,
+		student_class, student_name, student_no, update_date,exam_begin_end_times,exam_batch_id
+	</sql>
+    <select id="isExistAppointment" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+        id
+        FROM exam_student_appointment WHERE exam_name=#{name} AND student_no =#{no} LIMIT 1
+    </select>
+    <select id="queryExamStudentByStudentNo" resultMap="ExamStudent" parameterType="java.lang.Integer">
+        select
+        <include refid="ExamStudentP"/>
+        from exam_student WHERE student_no = #{value}
+    </select>
+    <select id="selectByExamNameWithOpen" resultMap="ExamManager" parameterType="map">
+        select
+        <include refid="ExamManagerP"/>
+        from exam_manager
+        where exam_name = #{name} and state =1 and #{date} BETWEEN appointment_begin_time and appointment_end_time
+    </select>
+    <select id="selectExamManagerById" resultMap="ExamManager" parameterType="java.lang.Integer">
+        select
+        <include refid="ExamManagerP"/>
+        from exam_manager
+        where state = 1 AND id=#{value}
+    </select>
+    <select id="selectWithOpen" resultMap="ExamManager" parameterType="date">
+        select
+        <include refid="ExamManagerP"/>
+        from exam_manager
+        where state=1 and #{date,jdbcType=TIMESTAMP} BETWEEN appointment_begin_time and appointment_end_time
+    </select>
+    <select id="selectExamStudentAppointmentList" resultMap="ExamStudentAppointment" parameterType="java.lang.Integer">
+        select
+        <include refid="ExamStudentAppointmentP"/>
+        from exam_student_appointment
+        where student_no = #{value}
+    </select>
+    <select id="isExistExamStudentAppointmentByStudentNoByExamName" resultType="java.lang.Integer" parameterType="map">
+		select
+		id
+		from exam_student_appointment
+		where  student_no = #{no} AND exam_name = #{name}
+	</select>
+    <select id="queryExamCourseIdByStudentId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+SELECT id FROM  exam_course WHERE course_code = (SELECT course_code FROM exam_student WHERE student_no =#{value})
+	</select>
+    <select id="queryExamBatchById" resultMap="ExamBatch" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="ExamBatchP"/>
+        FROM exam_batch WHERE id = #{value} and state = 1
+    </select>
+
+    <select id="queryBatchWithExamManagerByExamCourseCode" parameterType="map" resultMap="ExamBatch">
+        SELECT
+        id,
+        appointment_count,
+        course_id,
+        course_name,
+        course_no,
+        exam_batch_no,
+        exam_begin_end_time,
+        exam_classroom,
+        exam_date,
+        memo,
+        number,
+        state
+        FROM exam_batch
+        <where>
+            <if test="e.managerId != null">
+                exam_manager_id = #{e.managerId}
+            </if>
+
+            AND state = 1
+            <if test="e.code != null">
+                AND course_no = #{e.code}
+            </if>
+            <if test="false == e.isfull">
+                AND exam_batch.number> exam_batch.appointment_count
+            </if>
+            <if test="e.date!=null">
+                AND exam_date = #{e.date}
+            </if>
+            <if test="!''.equals(e.time)">
+                AND exam_begin_end_time = #{e.time}
+            </if>
+        </where>
+        <include refid="publicMapper.pageEnd"/>
+    </select>
+    <select id="queryBatchWithExamManagerByExamCourseCodeCount" parameterType="map" resultType="Integer">
+        SELECT COUNT(*) FROM exam_batch
+        <where>
+            <if test="e.managerId != null">
+                exam_manager_id = #{e.managerId}
+            </if>
+
+            AND state = 1
+            <if test="e.code != null">
+                AND course_no = #{e.code}
+            </if>
+            <if test="false == e.isfull">
+                AND exam_batch.number> exam_batch.appointment_count
+            </if>
+            <if test="e.date!=null">
+                AND exam_date = #{e.date}
+            </if>
+            <if test="!''.equals(e.time)">
+                AND exam_begin_end_time = #{e.time}
+            </if>
+        </where>
+    </select>
+    <select id="selectExamSeatByBatchId" resultMap="ExamSeat" parameterType="java.lang.Integer">
+        select
+    id, exam_batch_id, exam_classroom_name, seat_no, state
+        from exam_seat
+        where exam_batch_id=#{value} and state = 0
+    </select>
+    <update id="decExamBatchCountById" parameterType="int">
+        UPDATE exam_batch SET exam_batch.appointment_count = exam_batch.appointment_count-1
+        WHERE id=#{value};
+    </update>
+    <update id="incExamBatchCountById" parameterType="int">
+        UPDATE exam_batch SET exam_batch.appointment_count = exam_batch.appointment_count+1
+        WHERE id=#{value};
+    </update>
+    <select id="queryMyAppointment" resultMap="ExamStudentAppointment" parameterType="map">
+        SELECT
+        <include refid="ExamStudentAppointmentP"/>
+        FROM exam_student_appointment
+        where student_no = #{e.studentNo}
+        <include refid="publicMapper.pageEnd"/>
+    </select>
+    <select id="queryMyAppointmentCount" resultType="Integer" parameterType="map">
+        SELECT COUNT(*) FROM exam_student_appointment
+    </select>
+    <select id="queryExamBatchByBatchNoByClassroomByDateByBeginEndTimes" resultMap="ExamBatch" parameterType="map">
+        SELECT
+        <include refid="ExamBatchP"/>
+        FROM exam_batch WHERE
+        exam_batch_no = #{batchNo}
+        AND exam_classroom= #{classroom}
+        AND exam_date = #{date}
+        AND exam_begin_end_time = #{beginEndTimes}
+    </select>
+    <select id="querySeatIdSeatByBatchIdBySeatNoWithState1" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+        id
+        FROM exam_seat
+        WHERE
+        state = 1
+        AND exam_batch_id = #{batchId}
+        AND seat_no = #{seatNo}
+   </select>
+    <update id="changeSeatStateTo0BySeatId" parameterType="java.lang.Integer">
+        UPDATE exam_seat SET
+        state = 0
+        WHERE id = #{value}
+    </update>
+    <update id="changeSeatStateTo1BySeatId" parameterType="java.lang.Integer">
+        UPDATE exam_seat SET
+        state = 1
+        WHERE id = #{value}
+    </update>
+
+    <select id="queryBatchTime" resultType="java.lang.String" parameterType="map">
+        SELECT DISTINCT exam_begin_end_time FROM exam_batch
+        <where>
+            state = 1
+            AND exam_manager_id = #{managerId}
+            <if test="code!=null">
+                AND course_no = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="date!=null">
+                AND exam_date=#{date}
+            </if>
+        </where>
+    </select>
+    <select id="queryBatchDate" resultType="java.util.Date" parameterType="map">
+        SELECT DISTINCT exam_date FROM exam_batch
+        <where>
+            state = 1
+            AND exam_manager_id = #{managerId}
+            <if test="code!=null">
+                AND course_no = #{code,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="queryBatchTimeWithoutCourseCode" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT DISTINCT exam_begin_end_time FROM exam_batch WHERE state = 1 AND exam_manager_id = #{managerId}
+    </select>
+    <select id="queryExamManagerById" resultMap="ExamManager" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="ExamManagerP"/>
+        FROM exam_manager
+        WHERE
+        state = 1
+        AND id = #{managerId}
+    </select>
+
+    <insert id="insertExamStudentAppointment" parameterType="ExamStudentAppointment" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into exam_student_appointment (id, batch_no, exam_classroom,
+        exam_date, exam_name, memo,
+        score, seat_no, state, student_class,
+        student_name, student_no, update_date,exam_batch_id,exam_begin_end_times
+        )
+        values (#{id,jdbcType=INTEGER}, #{batchNo,jdbcType=INTEGER}, #{examClassroom,jdbcType=VARCHAR},
+        #{examDate,jdbcType=TIMESTAMP}, #{examName,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR},
+        #{score,jdbcType=VARCHAR}, #{seatNo,jdbcType=INTEGER}, #{state,jdbcType=BIT}, #{studentClass,jdbcType=VARCHAR},
+        #{studentName,jdbcType=VARCHAR}, #{studentNo,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},#{examBatchId,jdbcType=INTEGER},
+        #{examBeginEndTimes,jdbcType=VARCHAR}
+        )
+    </insert>
+    <delete id="deleteExamStudentAppointmentByPrimaryKey" parameterType="java.lang.Integer">
+        delete from exam_student_appointment
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectStudentAppointmentByPrimaryKeyWithtudentNo" resultMap="ExamStudentAppointment"
+            parameterType="map">
+        select
+        <include refid="ExamStudentAppointmentP"/>
+        from exam_student_appointment
+        where id = #{id,jdbcType=INTEGER} AND student_no = #{studentNo}
+    </select>
+</mapper>

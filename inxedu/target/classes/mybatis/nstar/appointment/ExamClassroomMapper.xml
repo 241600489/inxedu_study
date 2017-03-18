@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ExamClassroomMapper" >
+  <resultMap id="BaseResultMap" type="com.inxedu.os.nstar.appointment.entity.examClassroom.ExamClassroom" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="exam_classroom_name" property="examClassroomName" jdbcType="VARCHAR" />
+    <result column="max_number" property="maxNumber" jdbcType="INTEGER" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, exam_classroom_name, max_number, number, state
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.inxedu.os.nstar.appointment.entity.examClassroom.ExamClassroomExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from exam_classroom
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from exam_classroom
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from exam_classroom
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.inxedu.os.nstar.appointment.entity.examClassroom.ExamClassroomExample" >
+    delete from exam_classroom
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.inxedu.os.nstar.appointment.entity.examClassroom.ExamClassroom" >
+    insert into exam_classroom (id, exam_classroom_name, max_number, 
+      number, state)
+    values (#{id,jdbcType=INTEGER}, #{examClassroomName,jdbcType=VARCHAR}, #{maxNumber,jdbcType=INTEGER}, 
+      #{number,jdbcType=INTEGER}, #{state,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.inxedu.os.nstar.appointment.entity.examClassroom.ExamClassroom" >
+    insert into exam_classroom
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="examClassroomName != null" >
+        exam_classroom_name,
+      </if>
+      <if test="maxNumber != null" >
+        max_number,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="examClassroomName != null" >
+        #{examClassroomName,jdbcType=VARCHAR},
+      </if>
+      <if test="maxNumber != null" >
+        #{maxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.inxedu.os.nstar.appointment.entity.examClassroom.ExamClassroomExample" resultType="java.lang.Integer" >
+    select count(*) from exam_classroom
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update exam_classroom
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.examClassroomName != null" >
+        exam_classroom_name = #{record.examClassroomName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxNumber != null" >
+        max_number = #{record.maxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.number != null" >
+        number = #{record.number,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update exam_classroom
+    set id = #{record.id,jdbcType=INTEGER},
+      exam_classroom_name = #{record.examClassroomName,jdbcType=VARCHAR},
+      max_number = #{record.maxNumber,jdbcType=INTEGER},
+      number = #{record.number,jdbcType=INTEGER},
+      state = #{record.state,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inxedu.os.nstar.appointment.entity.examClassroom.ExamClassroom" >
+    update exam_classroom
+    <set >
+      <if test="examClassroomName != null" >
+        exam_classroom_name = #{examClassroomName,jdbcType=VARCHAR},
+      </if>
+      <if test="maxNumber != null" >
+        max_number = #{maxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inxedu.os.nstar.appointment.entity.examClassroom.ExamClassroom" >
+    update exam_classroom
+    set exam_classroom_name = #{examClassroomName,jdbcType=VARCHAR},
+      max_number = #{maxNumber,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      state = #{state,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--更新数据-->
+
+  <update id="updateExamClassroom" parameterType="ExamClassroom">
+     UPDATE `demo_inxedu_v2_0_open`.`exam_classroom`
+      SET `exam_classroom_name` = #{examClassroomName} , `max_number` = #{maxNumber},number=#{number},state=#{state}
+      WHERE `id` =#{id} ;
+  </update>
+  <select id="getExamClassroomList"  resultMap="BaseResultMap">
+    SELECT id,exam_classroom_name,max_number,number,state FROM exam_classroom
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="getExamClassroomListCount" resultType="Integer">
+    SELECT COUNT(*) FROM exam_classroom
+  </select>
+  <select id="queryClassRooomById" parameterType="Integer" resultMap="BaseResultMap">
+    SELECT  id,exam_classroom_name,max_number,number,state
+    FROM  exam_classroom
+    WHERE  id=#{id}
+  </select>
+  <select id="queryClassRoomByName" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM exam_classroom
+    <where>
+      <if test="e.examClassroomName!=null">
+        AND exam_classroom_name LIKE '%${e.examClassroomName}%'
+      </if>
+    </where>
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+
+  <select id="queryClassRoomByNameCount"   parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM exam_classroom
+    <where>
+    <if test="e.examClassroomName!=null">
+      AND exam_classroom_name LIKE '%${e.examClassroomName}%'
+    </if>
+    </where>
+  </select>
+  <select id="queryClassSByName" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM exam_classroom
+    <where>
+      <if test="e.examClassroomName!=null">
+        AND exam_classroom_name=#{e.examClassroomName}
+      </if>
+    </where>
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="queryClassSByNameCount" resultType="int" parameterType="map">
+    SELECT COUNT(*) FROM exam_classroom
+    <where>
+      <if test="e.examClassroomName!=null">
+        AND exam_classroom_name=#{e.examClassroomName}
+      </if>
+    </where>
+  </select>
+  <select id="queryClassRoomName" resultMap="BaseResultMap">
+    SELECT *
+    FROM  exam_classroom
+  </select>
+  <select id="queryAllExamClassroom" resultMap="BaseResultMap">
+    select * from exam_classroom
+  </select>
+  <select id="queryClassRoom" parameterType="String" resultMap="BaseResultMap">
+    SELECT * FROM exam_classroom
+    WHERE exam_classroom_name=#{value}
+  </select>
+</mapper>
